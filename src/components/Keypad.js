@@ -1,51 +1,59 @@
 import { Button } from "@mui/material";
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "increment":
-      return { count: state.count + 1 };
-
-    case "decrement":
-      return { count: state.count - 1 };
-    default:
-      return state;
+const ACTIONS = {
+  ADD_DIGIT: "add-digit",
+  CHOOSE_OPERATION: "choose-operation",
+  CLEAR: "clear",
+  DELETE_DIGIT: "delete-digit",
+  EVALUATE: "evaluate",
+};
+function reducer(state, { type, payload }) {
+  switch (type) {
+    case ACTIONS.ADD_DIGIT:
+      return {
+        ...state,
+        currentOperand: `${currentOperand || ""}${payload.digit}`,
+      };
   }
 }
-export default function Keypad() {
-  const [state, dispatch] = useReducer(reducer, { count: 0 });
+function Keypad() {
+  const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
+    reducer,
+    {}
+  );
 
-  function decrement() {
-    dispatch({ type: "decrement" });
-  }
-  function increment() {
-    dispatch({ type: "increment" });
-  }
+  dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: 1 } });
   return (
-    <div>
-      <div> {state.count}</div>
-      <div>
-        <Button>7</Button>
-        <Button>8</Button>
-        <Button>9</Button>
-        <Button>DEL</Button>
-        <Button>4</Button>
-        <Button>5</Button>
-        <Button>6</Button>
-        <Button onClick={increment}>+</Button>
-        <Button>1</Button>
-        <Button>2</Button>
-        <Button>3</Button>
-        <Button onClick={decrement}>-</Button>
-        <Button>.</Button>
-        <Button>0</Button>
-        <Button>/</Button>
-        <Button>X</Button>
-        <Button>RESET</Button>
-        <Button>=</Button>
+    <div className="calculator-grid">
+      <div className="output">
+        <div className="previous-operand">
+          {previousOperand}
+          {operation}{" "}
+        </div>
+        <div className="current-operand">{currentOperand}</div>
       </div>
+
+      <Button>7</Button>
+      <Button>8</Button>
+      <Button>9</Button>
+      <Button>DEL</Button>
+      <Button>4</Button>
+      <Button>5</Button>
+      <Button>6</Button>
+      <Button>+</Button>
+      <Button>1</Button>
+      <Button>2</Button>
+      <Button>3</Button>
+      <Button>-</Button>
+      <Button>.</Button>
+      <Button>0</Button>
+      <Button>/</Button>
+      <Button>X</Button>
+      <Button>RESET</Button>
+      <Button>=</Button>
     </div>
   );
 }
 
-// export default Keypad;
+export default Keypad;
