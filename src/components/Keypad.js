@@ -1,18 +1,29 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 
-function Keypad() {
-  const [count, setCount] = useState(0);
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
 
-  function decrementCount() {
-    setCount((prevCount) => prevCount - 1);
+    case "decrement":
+      return { count: state.count - 1 };
+    default:
+      return state;
   }
-  function incrementCount() {
-    setCount((prevCount) => prevCount + 1);
+}
+export default function Keypad() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  function decrement() {
+    dispatch({ type: "decrement" });
+  }
+  function increment() {
+    dispatch({ type: "increment" });
   }
   return (
     <div>
-      <div> {count}</div>
+      <div> {state.count}</div>
       <div>
         <Button>7</Button>
         <Button>8</Button>
@@ -21,11 +32,11 @@ function Keypad() {
         <Button>4</Button>
         <Button>5</Button>
         <Button>6</Button>
-        <Button onClick={incrementCount}>+</Button>
+        <Button onClick={increment}>+</Button>
         <Button>1</Button>
         <Button>2</Button>
         <Button>3</Button>
-        <Button onClick={decrementCount}>-</Button>
+        <Button onClick={decrement}>-</Button>
         <Button>.</Button>
         <Button>0</Button>
         <Button>/</Button>
@@ -37,4 +48,4 @@ function Keypad() {
   );
 }
 
-export default Keypad;
+// export default Keypad;
