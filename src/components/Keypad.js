@@ -1,7 +1,8 @@
 import { Button } from "@mui/material";
 import React, { useReducer } from "react";
+import DigitButton from "./DigitButton";
 
-const ACTIONS = {
+export const ACTIONS = {
   ADD_DIGIT: "add-digit",
   CHOOSE_OPERATION: "choose-operation",
   CLEAR: "clear",
@@ -24,18 +25,17 @@ function Keypad() {
     {}
   );
 
-  dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: 1 } });
   return (
     <div className="calculator-grid">
       <div className="output">
         <div className="previous-operand">
           {previousOperand}
-          {operation}{" "}
+          {operation}
         </div>
         <div className="current-operand">{currentOperand}</div>
       </div>
 
-      <Button>7</Button>
+      <DigitButton digit="7" dispatch={dispatch} />
       <Button>8</Button>
       <Button>9</Button>
       <Button>DEL</Button>
