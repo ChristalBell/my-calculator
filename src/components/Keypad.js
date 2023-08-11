@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useReducer } from "react";
 import DigitButton from "./DigitButton";
+import OperationButton from "./OperationButton";
 
 export const ACTIONS = {
   ADD_DIGIT: "add-digit",
@@ -12,10 +13,15 @@ export const ACTIONS = {
 function reducer(state, { type, payload }) {
   switch (type) {
     case ACTIONS.ADD_DIGIT:
+      if (payload.digit === "0" && state.currentOperand === "0") return state;
+      if (payload.digit === "." && state.currentOperand.includes("."))
+        return state;
       return {
         ...state,
         currentOperand: `${state.currentOperand || ""}${payload.digit}`,
       };
+    case ACTIONS.CLEAR:
+      return {};
     default:
   }
 }
@@ -36,22 +42,22 @@ function Keypad() {
       </div>
 
       <DigitButton digit="7" dispatch={dispatch} />
-      <Button>8</Button>
-      <Button>9</Button>
+      <DigitButton digit="8" dispatch={dispatch} />
+      <DigitButton digit="9" dispatch={dispatch} />
       <Button>DEL</Button>
-      <Button>4</Button>
-      <Button>5</Button>
-      <Button>6</Button>
-      <Button>+</Button>
-      <Button>1</Button>
-      <Button>2</Button>
-      <Button>3</Button>
-      <Button>-</Button>
-      <Button>.</Button>
-      <Button>0</Button>
-      <Button>/</Button>
-      <Button>X</Button>
-      <Button>RESET</Button>
+      <DigitButton digit="4" dispatch={dispatch} />
+      <DigitButton digit="5" dispatch={dispatch} />
+      <DigitButton digit="6" dispatch={dispatch} />
+      <OperationButton operation="+" dispatch={dispatch} />
+      <DigitButton digit="3" dispatch={dispatch} />
+      <DigitButton digit="2" dispatch={dispatch} />
+      <DigitButton digit="1" dispatch={dispatch} />
+      <OperationButton operation="-" dispatch={dispatch} />
+      <DigitButton digit="." dispatch={dispatch} />
+      <DigitButton digit="0" dispatch={dispatch} />
+      <OperationButton operation="/" dispatch={dispatch} />
+      <OperationButton operation="x" dispatch={dispatch} />
+      <Button onClick={() => dispatch({ type: ACTIONS.CLEAR })}>RESET</Button>
       <Button>=</Button>
     </div>
   );
