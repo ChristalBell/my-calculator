@@ -58,6 +58,24 @@ function reducer(state, { type, payload }) {
     case ACTIONS.CLEAR:
       return {};
 
+    case ACTIONS.DELETE_DIGIT:
+      if (state.overwrite) {
+        return {
+          ...state,
+          overwrite: false,
+          currentOperand: null,
+        };
+      }
+      if (state.currentOperand == null) return state;
+      if (state.currentOperand.length === 1) {
+        return { ...state, currentOperand: null };
+      }
+
+      return {
+        ...state,
+        currentOperand: state.currentOperand.slice(0, -1),
+      };
+
     case ACTIONS.EVALUATE:
       if (
         state.operation == null ||
@@ -104,7 +122,15 @@ function evaluate({ currentOperand, previousOperand, operation }) {
 
   return computation.toString();
 }
-
+const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
+  maximumFractionDigits: 0,
+});
+function formatOperand(operand) {
+  if (operand == null) return;
+  const [integer, decimal] = operand.split(".");
+  if (decimal == null) return INTEGER_FORMATTER.format(integer);
+  return `${INTEGER_FORMATTER.format(integer)}.${decimal}`;
+}
 function Keypad() {
   const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
     reducer,
@@ -115,16 +141,18 @@ function Keypad() {
     <div className="calculator-grid">
       <div className="output">
         <div className="previous-operand">
-          {previousOperand}
+          {formatOperand(previousOperand)}
           {operation}
         </div>
-        <div className="current-operand">{currentOperand}</div>
+        <div className="current-operand">{formatOperand(currentOperand)}</div>
       </div>
 
       <DigitButton digit="7" dispatch={dispatch} />
       <DigitButton digit="8" dispatch={dispatch} />
       <DigitButton digit="9" dispatch={dispatch} />
-      <Button>DEL</Button>
+      <Button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>
+        DEL
+      </Button>
       <DigitButton digit="4" dispatch={dispatch} />
       <DigitButton digit="5" dispatch={dispatch} />
       <DigitButton digit="6" dispatch={dispatch} />
