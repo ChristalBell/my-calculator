@@ -1,8 +1,12 @@
-import { Button } from "@mui/material";
+import { Button, ThemeProvider, createTheme } from "@mui/material";
 import React, { useReducer } from "react";
 import DigitButton from "./DigitButton";
 import OperationButton from "./OperationButton";
 import "./styles.css";
+<style>
+  @import
+  url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
+</style>;
 
 export const ACTIONS = {
   ADD_DIGIT: "add-digit",
@@ -138,38 +142,50 @@ function Keypad() {
     {}
   );
 
+  const theme = createTheme({
+    palette: {
+      main: "#fefefe",
+    },
+  });
+
   return (
-    <div className="calculator-grid">
-      <div className="output">
-        <div className="previous-operand">
-          {formatOperand(previousOperand)}
-          {operation}
+    <ThemeProvider theme={theme}>
+      <div className="calculator-grid">
+        <div className="output">
+          <div className="previous-operand">
+            {formatOperand(previousOperand)}
+            {operation}
+          </div>
+          <div className="current-operand">{formatOperand(currentOperand)}</div>
         </div>
-        <div className="current-operand">{formatOperand(currentOperand)}</div>
+        <div className="bottom-screen">
+          <DigitButton digit="7" dispatch={dispatch} />
+          <DigitButton digit="8" dispatch={dispatch} />
+          <DigitButton digit="9" dispatch={dispatch} />
+          <Button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>
+            DEL
+          </Button>
+          <DigitButton digit="4" dispatch={dispatch} />
+          <DigitButton digit="5" dispatch={dispatch} />
+          <DigitButton digit="6" dispatch={dispatch} />
+          <OperationButton operation="+" dispatch={dispatch} />
+          <DigitButton digit="3" dispatch={dispatch} />
+          <DigitButton digit="2" dispatch={dispatch} />
+          <DigitButton digit="1" dispatch={dispatch} />
+          <OperationButton operation="-" dispatch={dispatch} />
+          <DigitButton digit="." dispatch={dispatch} />
+          <DigitButton digit="0" dispatch={dispatch} />
+          <OperationButton operation="/" dispatch={dispatch} />
+          <OperationButton operation="x" dispatch={dispatch} />
+          <Button onClick={() => dispatch({ type: ACTIONS.CLEAR })}>
+            RESET
+          </Button>
+          <Button onClick={() => dispatch({ type: ACTIONS.EVALUATE })}>
+            =
+          </Button>
+        </div>
       </div>
-      <div className="bottom-screen">
-        <DigitButton digit="7" dispatch={dispatch} />
-        <DigitButton digit="8" dispatch={dispatch} />
-        <DigitButton digit="9" dispatch={dispatch} />
-        <Button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>
-          DEL
-        </Button>
-        <DigitButton digit="4" dispatch={dispatch} />
-        <DigitButton digit="5" dispatch={dispatch} />
-        <DigitButton digit="6" dispatch={dispatch} />
-        <OperationButton operation="+" dispatch={dispatch} />
-        <DigitButton digit="3" dispatch={dispatch} />
-        <DigitButton digit="2" dispatch={dispatch} />
-        <DigitButton digit="1" dispatch={dispatch} />
-        <OperationButton operation="-" dispatch={dispatch} />
-        <DigitButton digit="." dispatch={dispatch} />
-        <DigitButton digit="0" dispatch={dispatch} />
-        <OperationButton operation="/" dispatch={dispatch} />
-        <OperationButton operation="x" dispatch={dispatch} />
-        <Button onClick={() => dispatch({ type: ACTIONS.CLEAR })}>RESET</Button>
-        <Button onClick={() => dispatch({ type: ACTIONS.EVALUATE })}>=</Button>
-      </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
