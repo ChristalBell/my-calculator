@@ -192,13 +192,14 @@ function Keypad() {
           >
             RESET
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
-          >
-            =
-          </Button>
         </ThemeProvider>
+        <Button
+          sx={{ backgroundColor: "#cf3f31 ", color: "hsl(0, 0%, 100%)" }}
+          variant="contained"
+          onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
+        >
+          =
+        </Button>
       </div>
     </div>
   );
